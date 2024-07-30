@@ -1,7 +1,7 @@
-import Container from '@renderer/components/container'
 import EditorJS from '@editorjs/editorjs'
 import Header from '@editorjs/header'
 import { useEffect, useRef } from 'react'
+import { HiStar } from 'react-icons/hi2'
 
 const DEFAULT_INITIAL_DATA = {
   time: new Date().getTime(),
@@ -9,7 +9,7 @@ const DEFAULT_INITIAL_DATA = {
     {
       type: 'header',
       data: {
-        text: 'This is my awesome editor!',
+        text: 'This is my note app',
         level: 1
       }
     }
@@ -53,7 +53,10 @@ const CreateNote = (): JSX.Element => {
 
   return (
     <div className="w-full px-10 py-4">
-      <h1 className="text-xs text-gray-400 text-center">{dateString}</h1>
+      <div className="flex gap-2 items-center">
+        <HiStar className="text-gray-400" />
+        <h1 className="text-xs text-gray-400 text-center">{dateString}</h1>
+      </div>
       <div id="editorjs"></div>
     </div>
   )
