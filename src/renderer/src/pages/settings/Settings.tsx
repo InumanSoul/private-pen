@@ -1,23 +1,21 @@
 import Container from '@renderer/components/container'
 import { useState } from 'react'
-import useDatabase from '@renderer/models/useDatabase'
+import useUsers from '@renderer/hooks/useUsers'
 
 const Settings = (): JSX.Element => {
   const [username, setUsername] = useState('')
-  const { insertData } = useDatabase()
+  const { insertUser } = useUsers()
 
   const handleUserData = (): void => {
+    console.group('User data')
     const value = {
       Name: username,
-      CreatedAt: new Date().getTime(),
-      UpdatedAt: new Date().getTime()
+      CreatedAt: new Date(),
+      UpdatedAt: new Date()
     }
-
     console.log('User data', value)
-    insertData({
-      table: 'User',
-      data: value
-    })
+    insertUser(value)
+    console.groupEnd()
   }
   return (
     <Container>
@@ -31,7 +29,11 @@ const Settings = (): JSX.Element => {
           className="border rounded-lg px-2 py-1"
           onChange={(e) => setUsername(e.target.value)}
         />
-        <button onClick={handleUserData} className="bg-cyan-400 px-2 py-1 rounded-lg w-fit">
+        <button
+          type="button"
+          onClick={handleUserData}
+          className="bg-cyan-400 px-2 py-1 rounded-lg w-fit"
+        >
           Save
         </button>
       </div>

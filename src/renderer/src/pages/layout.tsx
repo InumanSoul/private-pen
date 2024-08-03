@@ -1,25 +1,22 @@
 import { Outlet } from 'react-router-dom'
 import TopBar from '@renderer/components/window/topbar'
 import Sidebar from '@renderer/components/navigation/Sidebar'
-import useDatabase from '@renderer/models/useDatabase'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import useDatabase from '@renderer/hooks/useDatabase'
 
 const Layout = (): JSX.Element => {
-  const { createDatabase } = useDatabase()
+  const { initDatabase } = useDatabase()
+  const [sideBarCollapse, setSideBarCollapse] = useState(false)
 
   useEffect(() => {
-    createDatabase()
-
-    return (): void => {
-      console.log('Database closed')
-    }
+    initDatabase()
   }, [])
 
   return (
     <>
-      <TopBar />
+      <TopBar collapsed={sideBarCollapse} sideBarHandler={setSideBarCollapse} />
       <div className="flex flex-nowrap bg-gray-50 mt-9">
-        <Sidebar />
+        <Sidebar collapsed={sideBarCollapse} />
         <main className="flex-1 bg-white shadow min-h-screen">
           <Outlet />
         </main>

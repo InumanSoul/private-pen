@@ -1,5 +1,6 @@
 import EditorJS from '@editorjs/editorjs'
 import Header from '@editorjs/header'
+import useNotes from '@renderer/hooks/useNotes'
 import { useEffect, useRef } from 'react'
 import { HiStar } from 'react-icons/hi2'
 
@@ -9,7 +10,7 @@ const DEFAULT_INITIAL_DATA = {
     {
       type: 'header',
       data: {
-        text: 'This is my note app',
+        text: 'New note title...',
         level: 1
       }
     }
@@ -17,6 +18,7 @@ const DEFAULT_INITIAL_DATA = {
 }
 
 const CreateNote = (): JSX.Element => {
+  const { insertNote } = useNotes()
   const ejInstance = useRef<EditorJS | null>(null)
   const date = new Date()
   const dateString = date.toLocaleDateString()
@@ -28,9 +30,7 @@ const CreateNote = (): JSX.Element => {
         ejInstance.current = editor
       },
       onChange: async (): Promise<void> => {
-        const content = await editor.saver.save()
-
-        console.log(content)
+        handleSave()
       },
       autofocus: true,
       tools: {
@@ -38,6 +38,18 @@ const CreateNote = (): JSX.Element => {
       },
       data: DEFAULT_INITIAL_DATA
     })
+  }
+
+  const handleSave = async (): Promise<void> => {
+    const content = await ejInstance.current?.save()
+    if (content) {
+      insertNote({
+        Title: content.blocks[0].data.text,
+        Detail: JSON.stringify(content),
+        CreatedAt: date,
+        UpdatedAt: date
+      })
+    }
   }
 
   useEffect(() => {
